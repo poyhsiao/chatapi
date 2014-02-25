@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-  <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-    <title>Test socket.io</title>
-    <script src="/socket.io/socket.io.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" charset="utf-8">
-      var socket = io.connect();
-      socket.on('news', function (data) {
-        console.log(data);
-        socket.emit('my other event', {my: 'data'});
-      });
-    </script>
-  </head>
-</html>
+{% extends "mainMenu.html" %}
+{% block content %}
+      <div id="main">
+        <div class="header">
+          <h1>It's start of Chat API</h1>
+        </div>
+        <div class="pure-g">
+          <div class="pure-1-2">
+          </div>
+          <div class="pure-1-2">
+            <div class="pure-1-2">Name</div>
+            <div class="pure-1-2">Source</div>
+          </div>
+        </div>
+      </div>
+{% endblock %}
