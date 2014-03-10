@@ -1,16 +1,17 @@
-
 /**
  * Module dependencies.
  */
 
 var express = require('express'),
-  app = express();
-  http = require('http');
-  swig = require('swig'),
-  routes = require('./routes'),
-  user = require('./routes/user'),
-  http = require('http'),
-  path = require('path');
+    app = express();
+http = require('http');
+swig = require('swig'),
+routes = require('./routes'),
+user = require('./routes/user'),
+http = require('http'),
+path = require('path');
+
+global conf = require('./config');
 
 app.set('port', process.env.PORT || 3000);
 // all environments
@@ -30,9 +31,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-  app.set('view cache', false);
-  swig.setDefaults({cache: false});
-  app.use(express.errorHandler());
+    app.set('view cache', false);
+    swig.setDefaults({
+        cache: false
+    });
+    app.use(express.errorHandler());
+}
+
+if ('production' === app.get('env')) {
+    app.set('view cache', true);
+    swig.setDefaults({
+        cache: true
+    });
 }
 
 app.get('/', routes.index);
@@ -40,13 +50,15 @@ app.get('/users', user.list);
 
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+server.listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + app.get('port'));
 });
 
-io.on('connection', function (socket) {
-  socket.emit('news', {hello: 'world'});
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+io.on('connection', function(socket) {
+    socket.emit('news', {
+        hello: 'world'
+    });
+    socket.on('my other event', function(data) {
+        console.log(data);
+    });
 });
